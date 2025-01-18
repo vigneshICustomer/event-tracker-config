@@ -7,18 +7,34 @@ class ICustomerService {
         this.privateInstance = null;
         this.initializationQueue = [];
         this.currentUser = null;
+        this.config = null;
+    }
 
-        // Initialize the service
+    /**
+     * Initialize the service with configuration
+     * @param {Object} config - Configuration object
+     * @param {string} config.analyticsUrl - URL for the analytics service
+     */
+    init(config) {
+        if (!config || !config.analyticsUrl) {
+            throw new Error('Analytics URL is required');
+        }
+        this.config = config;
         this._initialize();
+        return this;
     }
 
     /**
      * Private initialization method
      */
     _initialize() {
+        if (!this.config) {
+            throw new Error('Must call init() with config first');
+        }
+
         // Create a script element for the analytics provider
         const script = document.createElement('script');
-        script.src = 'https://cm60qnthl00002v6orm0kilny.d.jitsu.com/p.js';
+        script.src = this.config.analyticsUrl;
         script.async = true;
         
         // Setup the callback for when the provider is loaded
@@ -111,4 +127,11 @@ class ICustomerService {
 
 // Create and export a singleton instance
 const iCustomer = new ICustomerService();
-window.iCustomer = iCustomer;
+
+// Export the instance with public methods only
+window.iCustomer = {
+    init: iCustomer.init.bind(iCustomer),
+    identify: iCustomer.identify.bind(iCustomer),
+    track: iCustomer.track.bind(iCustomer),
+    getCurrentUser: iCustomer.getCurrentUser.bind(iCustomer)
+};
