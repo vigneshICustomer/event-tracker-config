@@ -1,1 +1,131 @@
-const _0x35fb92=_0x6dd0;function _0x2524(){const _0x53c9d9=['433050GovZwB','push','bind','Must\x20call\x20init()\x20with\x20config\x20first','2943730FBzObQ','isInitialized','shift','privateInstance','3103128eMoJAm','22144749iACARI','anonymous','config','appendChild','getCurrentUser','_queueIfNotInitialized','jitsuLoaded','8865AyakMn','33UsUZKU','jitsuConfig','4840NpIEdD','initializationQueue','_cleanupGlobals','identify','jitsuQ','init','setAttribute','_initialize','data-onload','10SuHNrv','async','length','toISOString','src','7YXqDbF','createElement','173676nYiOna','_processQueue','491043kXtiAf','track'];_0x2524=function(){return _0x53c9d9;};return _0x2524();}(function(_0x5b4fbe,_0x58261d){const _0x36b540=_0x6dd0,_0x35d673=_0x5b4fbe();while(!![]){try{const _0x350bc0=-parseInt(_0x36b540(0x11b))/0x1+parseInt(_0x36b540(0x119))/0x2*(parseInt(_0x36b540(0x107))/0x3)+parseInt(_0x36b540(0xfe))/0x4+parseInt(_0x36b540(0xfa))/0x5+parseInt(_0x36b540(0x11d))/0x6*(parseInt(_0x36b540(0x117))/0x7)+parseInt(_0x36b540(0x109))/0x8*(parseInt(_0x36b540(0x106))/0x9)+parseInt(_0x36b540(0x112))/0xa*(-parseInt(_0x36b540(0xff))/0xb);if(_0x350bc0===_0x58261d)break;else _0x35d673['push'](_0x35d673['shift']());}catch(_0x4562bd){_0x35d673['push'](_0x35d673['shift']());}}}(_0x2524,0x7613c));class ICustomerService{constructor(){const _0x373792=_0x6dd0;this[_0x373792(0xfb)]=![],this['privateInstance']=null,this[_0x373792(0x10a)]=[],this['currentUser']=null,this[_0x373792(0x101)]=null;}[_0x35fb92(0x10e)](_0x403d51){const _0x187359=_0x35fb92;if(!_0x403d51||!_0x403d51['analyticsUrl'])throw new Error('Analytics\x20URL\x20is\x20required');return this[_0x187359(0x101)]=_0x403d51,this[_0x187359(0x110)](),this;}[_0x35fb92(0x110)](){const _0x59f850=_0x35fb92;if(!this[_0x59f850(0x101)])throw new Error(_0x59f850(0xf9));const _0x18f237=document[_0x59f850(0x118)]('script');_0x18f237[_0x59f850(0x116)]=this[_0x59f850(0x101)]['analyticsUrl'],_0x18f237[_0x59f850(0x113)]=!![],window[_0x59f850(0x105)]=_0x31f16a=>{const _0x54fb80=_0x59f850;this[_0x54fb80(0xfd)]=_0x31f16a,this[_0x54fb80(0xfb)]=!![],this[_0x54fb80(0x11a)](),this['_cleanupGlobals']();},_0x18f237[_0x59f850(0x10f)](_0x59f850(0x111),_0x59f850(0x105)),document['head'][_0x59f850(0x102)](_0x18f237);}[_0x35fb92(0x11a)](){const _0x1b533a=_0x35fb92;while(this['initializationQueue'][_0x1b533a(0x114)]>0x0){const {method:_0x3398da,args:_0x2d61d8}=this[_0x1b533a(0x10a)][_0x1b533a(0xfc)]();this[_0x3398da](..._0x2d61d8);}}[_0x35fb92(0x10b)](){setTimeout(()=>{const _0x4ad82d=_0x6dd0;delete window['jitsu'],delete window[_0x4ad82d(0x10d)],delete window[_0x4ad82d(0x108)],delete window[_0x4ad82d(0x105)];},0x0);}['_queueIfNotInitialized'](_0x44457d,_0x4a5b9e){const _0x153bef=_0x35fb92;if(!this[_0x153bef(0xfb)])return this[_0x153bef(0x10a)][_0x153bef(0x11e)]({'method':_0x44457d,'args':_0x4a5b9e}),!![];return![];}[_0x35fb92(0x10c)](_0x2d2415,_0x1cc57e={}){const _0x54b611=_0x35fb92;if(this['_queueIfNotInitialized'](_0x54b611(0x10c),[_0x2d2415,_0x1cc57e]))return;this['currentUser']=_0x2d2415,this['privateInstance']['identify'](_0x2d2415,{..._0x1cc57e,'timeIdentified':new Date()[_0x54b611(0x115)]()});}['track'](_0x3d6110,_0x4f053e={}){const _0x424767=_0x35fb92;if(this[_0x424767(0x104)](_0x424767(0x11c),[_0x3d6110,_0x4f053e]))return;this[_0x424767(0xfd)][_0x424767(0x11c)](_0x3d6110,{..._0x4f053e,'timestamp':new Date()[_0x424767(0x115)](),'userEmail':this['currentUser']||_0x424767(0x100)});}[_0x35fb92(0x103)](){return this['currentUser'];}}function _0x6dd0(_0x2d0e16,_0x1f3fdb){const _0x2524ee=_0x2524();return _0x6dd0=function(_0x6dd039,_0x2ec201){_0x6dd039=_0x6dd039-0xf9;let _0x5e2c83=_0x2524ee[_0x6dd039];return _0x5e2c83;},_0x6dd0(_0x2d0e16,_0x1f3fdb);}const iCustomer=new ICustomerService();window['iCustomer']={'init':iCustomer[_0x35fb92(0x10e)][_0x35fb92(0x11f)](iCustomer),'identify':iCustomer[_0x35fb92(0x10c)][_0x35fb92(0x11f)](iCustomer),'track':iCustomer['track'][_0x35fb92(0x11f)](iCustomer),'getCurrentUser':iCustomer[_0x35fb92(0x103)][_0x35fb92(0x11f)](iCustomer)};
+/**
+ * ICustomer Service - A wrapper around analytics functionality with anonymous user support
+ */
+class ICustomerService {
+    static instance = null;
+
+    #generateAnonymousId() {
+        return 'anon_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    #getAnonymousId() {
+        let id = localStorage.getItem('anonymous_id');
+        if (!id) {
+            id = this.#generateAnonymousId();
+            localStorage.setItem('anonymous_id', id);
+        }
+        return id;
+    }
+
+    /**
+     * Initialize the ICustomer Service
+     * @param {Object} options - Configuration options
+     * @param {string} options.tenantId - The tenant ID for tracking
+     */
+    static initialize(options = {}) {
+        if (!ICustomerService.instance) {
+            ICustomerService.instance = new ICustomerService(options);
+        }
+        return ICustomerService.instance;
+    }
+
+    /**
+     * Identify a user
+     * @param {string} email - The user's email
+     * @param {Object} traits - Additional user properties
+     */
+    static async identify(email, traits = {}) {
+        if (!ICustomerService.instance) {
+            throw new Error('ICustomerService must be initialized first');
+        }
+        return ICustomerService.instance.identify(email, traits);
+    }
+
+    /**
+     * Track an event
+     * @param {string} eventName - Name of the event
+     * @param {Object} properties - Event properties
+     */
+    static async track(eventName, properties = {}) {
+        if (!ICustomerService.instance) {
+            throw new Error('ICustomerService must be initialized first');
+        }
+        return ICustomerService.instance.track(eventName, properties);
+    }
+
+    /**
+     * Get the current user ID
+     * @returns {string} The current user ID
+     */
+    static getCurrentUser() {
+        if (!ICustomerService.instance) {
+            throw new Error('ICustomerService must be initialized first');
+        }
+        return ICustomerService.instance.getCurrentUser();
+    }
+
+    constructor(options = {}) {
+        this.tenantId = options.tenantId;
+        
+        if (!this.tenantId) {
+            throw new Error('ICustomerService requires a tenantId for initialization');
+        }
+
+        // Initialize with anonymous ID or saved email
+        const savedEmail = localStorage.getItem('user_email');
+        this.currentUserId = savedEmail || this.#getAnonymousId();
+
+        // Track page view on initialization
+        if (typeof window !== 'undefined') {
+            this.track('page_viewed', {
+                url: window.location.href,
+                title: document.title,
+                referrer: document.referrer
+            });
+        }
+    }
+
+    async identify(email, traits = {}) {
+        const previousId = this.currentUserId;
+        this.currentUserId = email;
+        localStorage.setItem('user_email', email);
+
+        await fetch('https://resplendent-heliotrope-16c1b5.netlify.app/api/identify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: email,
+                previousId: previousId,
+                traits: {
+                    ...traits,
+                    email: email,
+                    anonymous_id: previousId
+                },
+                tenantId: this.tenantId
+            })
+        });
+    }
+
+    async track(eventName, properties = {}) {
+        await fetch('https://resplendent-heliotrope-16c1b5.netlify.app/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                eventName,
+                userId: this.currentUserId,
+                properties: {
+                    ...properties,
+                    user_type: this.currentUserId.startsWith('anon_') ? 'anonymous' : 'identified'
+                },
+                tenantId: this.tenantId
+            })
+        });
+    }
+
+    getCurrentUser() {
+        return this.currentUserId;
+    }
+}
+
+// Export the ICustomerService class
+window.ICustomerService = ICustomerService;
