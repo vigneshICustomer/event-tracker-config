@@ -4,19 +4,6 @@
 class ICustomerService {
     static instance = null;
 
-    #generateAnonymousId() {
-        return 'anon_' + Math.random().toString(36).substr(2, 9);
-    }
-
-    #getAnonymousId() {
-        let id = localStorage.getItem('anonymous_id');
-        if (!id) {
-            id = this.#generateAnonymousId();
-            localStorage.setItem('anonymous_id', id);
-        }
-        return id;
-    }
-
     /**
      * Initialize the ICustomer Service
      * @param {Object} options - Configuration options
@@ -71,11 +58,10 @@ class ICustomerService {
             throw new Error('ICustomerService requires a tenantId for initialization');
         }
 
-        // Initialize with anonymous ID or saved email
-        const savedEmail = localStorage.getItem('user_email');
-        this.currentUserId = savedEmail || this.#getAnonymousId();
+        // Initialize with saved email if exists
+        this.currentUserId = localStorage.getItem('user_email');
 
-        // Track page view on initialization
+        // Track page view on initialization using Jitsu
         if (typeof window !== 'undefined') {
             this.track('page_viewed', {
                 url: window.location.href,
@@ -86,20 +72,17 @@ class ICustomerService {
     }
 
     async identify(email, traits = {}) {
-        const previousId = this.currentUserId;
         this.currentUserId = email;
         localStorage.setItem('user_email', email);
 
-        await fetch('https://resplendent-heliotrope-16c1b5.netlify.app/api/identify', {
+        await fetch('https://icustomer-tracker-backend.onrender.com/api/identify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 userId: email,
-                previousId: previousId,
                 traits: {
                     ...traits,
-                    email: email,
-                    anonymous_id: previousId
+                    email: email
                 },
                 tenantId: this.tenantId
             })
@@ -107,16 +90,13 @@ class ICustomerService {
     }
 
     async track(eventName, properties = {}) {
-        await fetch('https://resplendent-heliotrope-16c1b5.netlify.app/api/track', {
+        await fetch('https://icustomer-tracker-backend.onrender.com/api/track', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 eventName,
-                userId: this.currentUserId,
-                properties: {
-                    ...properties,
-                    user_type: this.currentUserId.startsWith('anon_') ? 'anonymous' : 'identified'
-                },
+                userId: this.currentUserId || undefined, // Let Jitsu handle anonymous state
+                properties,
                 tenantId: this.tenantId
             })
         });
