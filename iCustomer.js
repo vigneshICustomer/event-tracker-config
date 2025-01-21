@@ -1,111 +1,132 @@
-/**
- * ICustomer Service - A wrapper around analytics functionality with anonymous user support
- */
-class ICustomerService {
-    static instance = null;
-
-    /**
-     * Initialize the ICustomer Service
-     * @param {Object} options - Configuration options
-     * @param {string} options.tenantId - The tenant ID for tracking
-     */
-    static initialize(options = {}) {
-        if (!ICustomerService.instance) {
-            ICustomerService.instance = new ICustomerService(options);
-        }
-        return ICustomerService.instance;
-    }
-
-    /**
-     * Identify a user
-     * @param {string} email - The user's email
-     * @param {Object} traits - Additional user properties
-     */
-    static async identify(email, traits = {}) {
-        if (!ICustomerService.instance) {
-            throw new Error('ICustomerService must be initialized first');
-        }
-        return ICustomerService.instance.identify(email, traits);
-    }
-
-    /**
-     * Track an event
-     * @param {string} eventName - Name of the event
-     * @param {Object} properties - Event properties
-     */
-    static async track(eventName, properties = {}) {
-        if (!ICustomerService.instance) {
-            throw new Error('ICustomerService must be initialized first');
-        }
-        return ICustomerService.instance.track(eventName, properties);
-    }
-
-    /**
-     * Get the current user ID
-     * @returns {string} The current user ID
-     */
-    static getCurrentUser() {
-        if (!ICustomerService.instance) {
-            throw new Error('ICustomerService must be initialized first');
-        }
-        return ICustomerService.instance.getCurrentUser();
-    }
-
+// Event Tracking SDK
+class EventTracker {
     constructor(options = {}) {
-        this.tenantId = options.tenantId;
-        
-        if (!this.tenantId) {
-            throw new Error('ICustomerService requires a tenantId for initialization');
-        }
+        this.apiUrl = options.apiUrl || 'http://localhost:3000/api';
+        this.sessionId = null;
+        this.identity = null;
+        this.initialize();
+    }
 
-        // Initialize with saved email if exists
-        this.currentUserId = localStorage.getItem('user_email');
-
-        // Track page view on initialization using Jitsu
-        if (typeof window !== 'undefined') {
-            this.track('page_viewed', {
-                url: window.location.href,
-                title: document.title,
-                referrer: document.referrer
+    async initialize() {
+        try {
+            const response = await fetch(`${this.apiUrl}/init`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+            
+            if (!response.ok) {
+                throw new Error('Failed to initialize tracking');
+            }
+            
+            const data = await response.json();
+            this.sessionId = data.sessionId;
+            this.identity = data.identity;
+
+            // If there's an existing identity, log it
+            if (this.identity) {
+                console.log('Session initialized with existing identity:', this.identity);
+            }
+        } catch (error) {
+            console.error('Error initializing tracking:', error);
         }
     }
 
-    async identify(email, traits = {}) {
-        this.currentUserId = email;
-        localStorage.setItem('user_email', email);
+    async _ensureInitialized() {
+        if (!this.sessionId) {
+            await this.initialize();
+        }
+    }
 
-        await fetch('https://icustomer-tracker-backend.onrender.com/api/identify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                userId: email,
-                traits: {
-                    ...traits,
-                    email: email
+    async _trackEvent(eventName, properties = {}) {
+        await this._ensureInitialized();
+
+        try {
+            const response = await fetch(`${this.apiUrl}/track`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                tenantId: this.tenantId
-            })
+                body: JSON.stringify({
+                    sessionId: this.sessionId,
+                    eventName,
+                    properties
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to track event');
+            }
+
+            const result = await response.json();
+            console.log('Event tracked:', result);
+            return result;
+        } catch (error) {
+            console.error('Error tracking event:', error);
+            throw error;
+        }
+    }
+
+    async page_visit(pageProperties = {}) {
+        return this._trackEvent('page_visit', {
+            url: window.location.href,
+            title: document.title,
+            referrer: document.referrer,
+            ...pageProperties
         });
     }
 
-    async track(eventName, properties = {}) {
-        await fetch('https://icustomer-tracker-backend.onrender.com/api/track', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                eventName,
-                userId: this.currentUserId || undefined, // Let Jitsu handle anonymous state
-                properties,
-                tenantId: this.tenantId
-            })
-        });
+    async track(eventName, eventProperties = {}) {
+        return this._trackEvent(eventName, eventProperties);
     }
 
-    getCurrentUser() {
-        return this.currentUserId;
+    async identify(userProperties) {
+        await this._ensureInitialized();
+
+        try {
+            const response = await fetch(`${this.apiUrl}/identify`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sessionId: this.sessionId,
+                    userData: userProperties
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to identify user');
+            }
+
+            const result = await response.json();
+            this.identity = result.identity;
+            console.log('User identified:', result);
+            return result;
+        } catch (error) {
+            console.error('Error identifying user:', error);
+            throw error;
+        }
+    }
+
+    async getAllEvents() {
+        await this._ensureInitialized();
+        
+        try {
+            const response = await fetch(`${this.apiUrl}/events/${this.sessionId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch events');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching events:', error);
+            throw error;
+        }
     }
 }
 
-// Export the ICustomerService class
-window.ICustomerService = ICustomerService;
+// Create a global instance
+document.addEventListener('DOMContentLoaded', () => {
+    window.EventTracker = new EventTracker();
+});
