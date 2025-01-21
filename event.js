@@ -1,19 +1,36 @@
 // Event Tracking SDK
 class EventTracker {
     constructor(options = {}) {
-        this.apiUrl = options.apiUrl || 'https://finger-print-bn.onrender.com/api';
+        this.apiUrl = options.apiUrl || 'http://localhost:3000/api';
         this.sessionId = null;
         this.identity = null;
+        this.visitorData = null;
         this.initialize();
     }
 
     async initialize() {
         try {
+            // Initialize FingerprintJS Pro
+            const FingerprintJS = await import('https://fpjscdn.net/v3/kYVarTYjAJjBfUp2CjzW');
+
+            // Get visitor data
+            const fp = await FingerprintJS.load();
+            this.visitorData = await fp.get({
+                extendedResult: true
+            });
+            console.log("VISITOR => ", this.visitorData)
+
+
+            // Initialize session with visitor data
             const response = await fetch(`${this.apiUrl}/init`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                    requestId: this.visitorData.requestId,
+                    visitorId: this.visitorData.visitorId
+                })
             });
             
             if (!response.ok) {
@@ -51,7 +68,9 @@ class EventTracker {
                 body: JSON.stringify({
                     sessionId: this.sessionId,
                     eventName,
-                    properties
+                    properties,
+                    requestId: this.visitorData.requestId,
+                    visitorId: this.visitorData.visitorId
                 })
             });
 
@@ -92,7 +111,9 @@ class EventTracker {
                 },
                 body: JSON.stringify({
                     sessionId: this.sessionId,
-                    userData: userProperties
+                    userData: userProperties,
+                    requestId: this.visitorData.requestId,
+                    visitorId: this.visitorData.visitorId
                 })
             });
 
