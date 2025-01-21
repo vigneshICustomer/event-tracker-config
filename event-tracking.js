@@ -1,7 +1,7 @@
 // Event Tracking SDK
 class EventTracker {
     constructor(options = {}) {
-        this.apiUrl = options.apiUrl || 'http://localhost:3000/api';
+        this.apiUrl = options.apiUrl || 'https://finger-print-bn.onrender.com/api';
         this.sessionId = null;
         this.identity = null;
         this.initialize();
