@@ -1,3 +1,5 @@
+var EventTracker;
+
 // Event Tracking SDK
 class EventTracker {
     constructor(options = {}) {
@@ -149,6 +151,7 @@ class EventTracker {
 
 // Create a global instance
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("calling the evnet trracker")
-    window.EventTracker = new EventTracker();
+    console.log("calling event tracker.")
+    EventTracker = new EventTrackerClass(); // Assign to global variable
+    window.EventTracker = EventTracker; // Also assign to window for compatibility
 });
