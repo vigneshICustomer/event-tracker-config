@@ -149,5 +149,6 @@ class EventTracker {
 
 // Create a global instance
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("calling the evnet trracker")
     window.EventTracker = new EventTracker();
 });
