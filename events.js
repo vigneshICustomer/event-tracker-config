@@ -1,9 +1,16 @@
 var EventTracker;
 
 // Event Tracking SDK
-class EventTracker {
+class EventTrackerClass {
     constructor(options = {}) {
-        this.apiUrl = options.apiUrl || 'https://finger-print-bn.onrender.com/api';
+        // Get tenant ID from script tag
+        const scriptTag = document.currentScript || document.querySelector('script[src*="https://cdn.jsdelivr.net/gh/vigneshICustomer/events.js"]');
+        const tenantId = scriptTag?.getAttribute('data-tenant-id');
+        if (!tenantId) {
+            throw new Error('data-tenant-id attribute is required in script tag');
+        }
+        this.apiUrl = options.apiUrl || 'https://finger-print-bn.onrender.com/eventTracking';
+        this.tenantId = tenantId;
         this.sessionId = null;
         this.identity = null;
         this.visitorData = null;
@@ -31,7 +38,8 @@ class EventTracker {
                 },
                 body: JSON.stringify({
                     requestId: this.visitorData.requestId,
-                    visitorId: this.visitorData.visitorId
+                    visitorId: this.visitorData.visitorId,
+                    tenantId: this.tenantId
                 })
             });
             
@@ -72,7 +80,8 @@ class EventTracker {
                     eventName,
                     properties,
                     requestId: this.visitorData.requestId,
-                    visitorId: this.visitorData.visitorId
+                    visitorId: this.visitorData.visitorId,
+                    tenantId: this.tenantId
                 })
             });
 
@@ -115,7 +124,8 @@ class EventTracker {
                     sessionId: this.sessionId,
                     userData: userProperties,
                     requestId: this.visitorData.requestId,
-                    visitorId: this.visitorData.visitorId
+                    visitorId: this.visitorData.visitorId,
+                    tenantId: this.tenantId
                 })
             });
 
@@ -137,7 +147,7 @@ class EventTracker {
         await this._ensureInitialized();
         
         try {
-            const response = await fetch(`${this.apiUrl}/events/${this.sessionId}`);
+            const response = await fetch(`${this.apiUrl}/events/${this.sessionId}?tenantId=${this.tenantId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch events');
             }
@@ -149,9 +159,14 @@ class EventTracker {
     }
 }
 
-// Create a global instance
+// Initialize EventTracker when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("calling event tracker.")
-    EventTracker = new EventTrackerClass(); // Assign to global variable
-    window.EventTracker = EventTracker; // Also assign to window for compatibility
+    console.log("Initializing event tracker");
+    EventTracker = new EventTrackerClass();
+    window.EventTracker = EventTracker;
+    
+    // Track initial page visit after initialization
+    setTimeout(() => {
+        window.EventTracker.page_visit();
+    }, 1000);
 });
